@@ -1499,9 +1499,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@shebaoting/money@workspace:.":
+"@shebaoting/flarum-money@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@shebaoting/money@workspace:."
+  resolution: "@shebaoting/flarum-money@workspace:."
   dependencies:
     "@flarum/prettier-config": "npm:^1.0.0"
     flarum-tsconfig: "npm:^2.0.0"

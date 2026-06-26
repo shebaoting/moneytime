@@ -1,5 +1,5 @@
 {
-    "name": "@shebaoting/money",
+    "name": "@shebaoting/flarum-money",
     "private": true,
     "version": "0.0.0",
     "devDependencies": {

@@ -1,12 +1,15 @@
 {
-    "name": "shebaoting/money",
+    "name": "shebaoting/flarum-money",
     "description": "Adds a virtual currency system to the Flarum community, allowing users to earn and spend points.",
     "keywords": [
         "flarum"
     ],
-    "version": "2.0.0",
+    "version": "2.0.1",
     "type": "flarum-extension",
     "license": "MIT",
+    "replace": {
+        "shebaoting/money": "self.version"
+    },
     "require": {
         "php": "^8.3",
         "flarum/core": "^2.0.0-beta",

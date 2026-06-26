@@ -1,6 +1,6 @@
 # Money
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/shebaoting/money.svg)](https://packagist.org/packages/shebaoting/money) [![Total Downloads](https://img.shields.io/packagist/dt/shebaoting/money.svg)](https://packagist.org/packages/shebaoting/money)
+![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/shebaoting/flarum-money.svg)](https://packagist.org/packages/shebaoting/flarum-money) [![Total Downloads](https://img.shields.io/packagist/dt/shebaoting/flarum-money.svg)](https://packagist.org/packages/shebaoting/flarum-money)
 
 A [Flarum](https://flarum.org) extension that adds a configurable virtual currency and point ledger to your community.
 
@@ -113,7 +113,7 @@ This extension is based on [flarum-ext-money by AntoineFr](https://github.com/An
 Install with Composer:
 
 ```sh
-composer require shebaoting/money:"^2.0"
+composer require shebaoting/flarum-money:"^2.0"
 ```
 
 Run migrations and clear the Flarum cache:
@@ -128,9 +128,16 @@ Then enable the extension in the Flarum admin panel and configure the permission
 ## Updating
 
 ```sh
-composer update shebaoting/money:"^2.0"
+composer update shebaoting/flarum-money:"^2.0"
 php flarum migrate
 php flarum cache:clear
+```
+
+If your forum still requires the old package name, switch the Composer requirement first:
+
+```sh
+composer remove shebaoting/money --no-update
+composer require shebaoting/flarum-money:"^2.0" -W
 ```
 
 When upgrading from `0.x` to `2.x`, make sure your forum is already running Flarum 2.x beta and PHP 8.3 or newer.
@@ -168,5 +175,5 @@ Email: th9th@th9th.com
 ## Links
 
 - [My Community](https://wyz.xyz)
-- [Packagist](https://packagist.org/packages/shebaoting/money)
-- [GitHub](https://github.com/shebaoting/money)
+- [Packagist](https://packagist.org/packages/shebaoting/flarum-money)
+- [GitHub](https://github.com/shebaoting/flarum-money)

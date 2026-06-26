@@ -3,7 +3,7 @@ extend.php
 <?php
 
 /*
- * This file is part of shebaoting/money.
+ * This file is part of shebaoting/flarum-money.
  *
  * Copyright (c) 2024 Shebaoting.
  *
@@ -1005,8 +1005,8 @@ js/src/common/index.ts
 ```
 import app from 'flarum/common/app';
 
-app.initializers.add('shebaoting/money', () => {
-  console.log('[shebaoting/money] Hello, forum and admin!');
+app.initializers.add('shebaoting/flarum-money', () => {
+  console.log('[shebaoting/flarum-money] Hello, forum and admin!');
 });
 
 ```
@@ -1796,4 +1796,3 @@ class GiveMoney
 }
 
 ```
-

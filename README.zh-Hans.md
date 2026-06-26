@@ -105,7 +105,7 @@ Money 是一个用于 [Flarum](https://flarum.org) 的虚拟货币 / 积分扩�
 使用 Composer 安装：
 
 ```sh
-composer require shebaoting/money:"^2.0"
+composer require shebaoting/flarum-money:"^2.0"
 ```
 
 执行数据库迁移并清理缓存：
@@ -120,9 +120,16 @@ php flarum cache:clear
 ## 更新
 
 ```sh
-composer update shebaoting/money:"^2.0"
+composer update shebaoting/flarum-money:"^2.0"
 php flarum migrate
 php flarum cache:clear
+```
+
+如果你的站点仍然使用旧包名，请先切换 Composer 依赖：
+
+```sh
+composer remove shebaoting/money --no-update
+composer require shebaoting/flarum-money:"^2.0" -W
 ```
 
 如果从 `0.x` 升级到 `2.x`，请先确认论坛已经升级到 Flarum 2.x beta，并且运行环境满足 PHP 8.3 或更高版本。
