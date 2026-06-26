@@ -1,12 +1,13 @@
-import Modal from 'flarum/components/Modal';
-import Button from 'flarum/components/Button';
-import Stream from 'flarum/utils/Stream';
+import app from 'flarum/forum/app';
+import FormModal from 'flarum/common/components/FormModal';
+import Button from 'flarum/common/components/Button';
+import Stream from 'flarum/common/utils/Stream';
 
-export default class UserMoneyModal extends Modal {
+export default class UserMoneyModal extends FormModal {
   oninit(vnode) {
     super.oninit(vnode);
 
-    this.money = Stream(this.attrs.user.data.attributes['money'] || 0.0);
+    this.money = Stream(String(this.attrs.user.money ? this.attrs.user.money() : 0));
   }
 
   className() {
@@ -14,30 +15,26 @@ export default class UserMoneyModal extends Modal {
   }
 
   title() {
-    return app.translator.trans('shebaoting-money.forum.modal.title', { user: this.attrs.user });
+    return app.translator.trans('shebaoting-money.forum.modal.title', { username: this.attrs.user.displayName() });
   }
 
   content() {
     const moneyName = app.forum.attribute('shebaoting-money.moneyname') || '[money]';
+    const currentMoney = this.attrs.user.money ? this.attrs.user.money() : 0;
 
     return (
       <div className="Modal-body">
         <div className="Form">
           <div className="Form-group">
             <label>
-              {app.translator.trans('shebaoting-money.forum.modal.current')} {moneyName.replace('[money]', this.attrs.user.data.attributes['money'])}
+              {app.translator.trans('shebaoting-money.forum.modal.current')} {moneyName.replace('[money]', currentMoney)}
             </label>
             <input required className="FormControl" type="number" step="any" bidi={this.money} />
           </div>
           <div className="Form-group">
-            {Button.component(
-              {
-                className: 'Button Button--primary',
-                type: 'submit',
-                loading: this.loading,
-              },
-              app.translator.trans('shebaoting-money.forum.modal.submit_button')
-            )}
+            <Button className="Button Button--primary" type="submit" loading={this.loading}>
+              {app.translator.trans('shebaoting-money.forum.modal.submit_button')}
+            </Button>
           </div>
         </div>
       </div>
@@ -50,7 +47,7 @@ export default class UserMoneyModal extends Modal {
     this.loading = true;
 
     this.attrs.user
-      .save({ money: this.money() }, { errorHandler: this.onerror.bind(this) })
+      .save({ money: Number(this.money()) }, { errorHandler: this.onerror.bind(this) })
       .then(this.hide.bind(this))
       .catch(() => {
         this.loading = false;

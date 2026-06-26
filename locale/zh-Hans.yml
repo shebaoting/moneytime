@@ -63,22 +63,24 @@ shebaoting-money:
     no_money_logs: "暂无积分记录"
     load_more: "加载更多"
     logs_description:
-      created_discussion: '创建了主题 › <a href="{url}">{title}</a>'
-      created_reply: '创建了回复 › <a href="{url}">{title}</a>'
-      reply_received: '收到 {username} 的回复 › <a href="{url}">{title}</a>'
-      liked: '点赞了帖子 › <a href="{url}">{title}</a> by {user}'
-      liked_by: '被 {username} 点赞 › <a href="{url}">{title}</a>'
-      unliked_post: '取消点赞了帖子 › <a href="{url}">{title}</a>'
-      unliked_by: '被 {username} 取消点赞 › <a href="{url}">{title}</a>'
+      created_discussion: '创建了主题：{title}'
+      created_reply: '创建了回复：{title}'
+      reply_received: '收到 {username} 的回复：{title}'
+      liked: '点赞了帖子：{title}，作者 {user}'
+      liked_by: '被 {username} 点赞：{title}'
+      unliked_post: '取消点赞了帖子：{title}'
+      unliked_by: '被 {username} 取消点赞：{title}'
       initial_registration: "注册时获得初始积分。"
       admin_updated: "管理员更新了积分，变动数量为 {amount}。"
-      discussion_started: '发起了讨论 › <a href="{url}">{title}</a>'
-      discussion_restored: '恢复了讨论 › <a href="{url}">{title}</a>'
-      discussion_hidden: '隐藏了讨论 › <a href="{url}">{title}</a>'
-      discussion_deleted: '删除了讨论 › <a href="{url}">{title}</a>'
-      posted_reply: '回复了讨论 › <a href="{url}">{title}</a>'
-      post_created: '创建了主题 › <a href="{url}">{title}</a>'
-      # 新增的描述
+      discussion_started: '发起了讨论：{title}'
+      discussion_restored: '恢复了讨论：{title}'
+      discussion_hidden: '隐藏了讨论：{title}'
+      discussion_deleted: '删除了讨论：{title}'
+      posted_reply: '回复了讨论：{title}'
+      post_created: '创建了主题：{title}'
+      post_restored: '恢复了帖子：{title}'
+      post_hidden: '隐藏了帖子：{title}'
+      post_deleted: '删除了帖子：{title}'
       extra_characters: "内容超过阈值 {threshold} 字，额外 {extra_chars} 字，{points} 积分已被 {action}。"
       action_rewarded: "奖励"
       action_deducted: "扣除"

@@ -12,11 +12,18 @@ class MoneyLog extends Model
     protected $table = 'money_logs';
 
     protected $fillable = ['user_id', 'amount', 'action', 'reason', 'balance', 'target_user_id', 'post_id', 'discussion_id'];
-    public $timestamps = true; // 确保启用自动时间戳
+    protected $casts = [
+        'amount' => 'float',
+        'balance' => 'float',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    public $timestamps = true;
 
     public function user()
     {
-        return $this->belongsTo('Flarum\User\User');
+        return $this->belongsTo(User::class);
     }
 
     public function targetUser()

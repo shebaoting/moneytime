@@ -3,5 +3,5 @@
 use Flarum\Database\Migration;
 
 return Migration::addColumns('users', [
-    'money' => ['integer']
+    'money' => ['float', 'default' => 0]
 ]);

@@ -1,14 +1,49 @@
 .MoneySettingRow {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  white-space: nowrap;
 
-  .FormControl {
-    flex: 1 1 auto;
+  > input.FormControl {
+    flex: 0 0 140px;
+    width: 140px;
+    min-width: 0;
+    max-width: none;
   }
 
-  select.FormControl {
+  .MoneySettingSelect {
+    display: inline-flex;
+    align-items: center;
     flex: 0 0 auto;
+    position: relative;
+    min-width: 0;
+  }
+
+  .MoneySettingSelect--type {
+    width: 104px;
+  }
+
+  .MoneySettingSelect--feedback {
+    width: 128px;
+  }
+
+  .Select-input {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    padding-right: 30px;
+  }
+
+  .Select-caret {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    flex: 0 0 30px;
+    width: 30px;
+    margin-left: -30px;
+    line-height: 1;
   }
 }

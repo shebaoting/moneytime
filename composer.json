@@ -4,11 +4,13 @@
     "keywords": [
         "flarum"
     ],
-    "version": "0.8.0",
+    "version": "2.0.0",
     "type": "flarum-extension",
     "license": "MIT",
     "require": {
-        "flarum/core": "^1.2.0"
+        "php": "^8.3",
+        "flarum/core": "^2.0.0-beta",
+        "flarum/likes": "^2.0@beta"
     },
     "authors": [
         {
@@ -25,7 +27,7 @@
     "extra": {
         "flarum-extension": {
             "title": "Money",
-            "category": "",
+            "category": "feature",
             "icon": {
                 "name": "fas fa-money-bill",
                 "color": "#fff",
@@ -74,6 +76,6 @@
         "test:setup": "Sets up a database for use with integration tests. Execute this only once."
     },
     "require-dev": {
-        "flarum/testing": "^1.0.0"
+        "flarum/testing": "^2.0.0-beta"
     }
 }

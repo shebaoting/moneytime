@@ -346,10 +346,11 @@ class GiveMoney
                 $amount = ($typeForReply === 'deduct') ? -abs($moneyForReply) : abs($moneyForReply);
 
                 // 生成讨论的 URL
-                $discussionUrl = $this->url->to('forum')->route('discussion', ['id' => $event->discussion->id, 'slug' => $event->discussion->slug]);
+                $discussion = $event->post->discussion;
+                $discussionUrl = $this->url->to('forum')->route('discussion', ['id' => $discussion->id, 'slug' => $discussion->slug]);
 
                 $description = app()->translator->trans('shebaoting-money.forum.logs_description.post_deleted', [
-                    'title' => $event->discussion->title,
+                    'title' => $discussion->title,
                     'url' => $discussionUrl
                 ]);
 
@@ -473,7 +474,7 @@ class GiveMoney
         if (array_key_exists('money', $attributes)) {
             $user = $event->user;
             $actor = $event->actor;
-            $oldMoney = $user->money;
+            $oldMoney = (float) $user->getOriginal('money');
 
             // 检查管理员是否有权限编辑积分
             $actor->assertCan('edit_money', $user);
@@ -518,7 +519,7 @@ class GiveMoney
     public function postWasLiked(PostWasLiked $event)
     {
         // 不处理自己点赞自己
-        if ($event->actor->id === $event->post->user->id) {
+        if ($event->user->id === $event->post->user->id) {
             return;
         }
 
@@ -526,7 +527,7 @@ class GiveMoney
         $typeForLike = $this->settings->get('shebaoting-money.moneyforlike_type', 'reward'); // 'reward' or 'deduct'
         $feedbackLike = $this->settings->get('shebaoting-money.moneyforlike_feedback', 'no_feedback'); // 'feedback' or 'no_feedback'
 
-        $user = $event->actor; // 点赞的用户
+        $user = $event->user; // 点赞的用户
         $postAuthor = $event->post->user; // 被点赞的帖子作者
         $discussionTitle = $event->post->discussion->title;
 
@@ -579,7 +580,7 @@ class GiveMoney
         $typeForLike = $this->settings->get('shebaoting-money.moneyforlike_type', 'reward'); // 'reward' or 'deduct'
         $feedbackLike = $this->settings->get('shebaoting-money.moneyforlike_feedback', 'no_feedback'); // 'feedback' or 'no_feedback'
 
-        $user = $event->actor; // 取消点赞的用户
+        $user = $event->user; // 取消点赞的用户
         $postAuthor = $event->post->user; // 被点赞的帖子作者
         $discussionTitle = $event->post->discussion->title;
 

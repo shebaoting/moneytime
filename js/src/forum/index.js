@@ -1,123 +1,67 @@
 import app from 'flarum/forum/app';
-import { extend } from 'flarum/extend';
-import UserCard from 'flarum/components/UserCard';
-import UserControls from 'flarum/utils/UserControls';
-import Button from 'flarum/components/Button';
-import LinkButton from 'flarum/components/LinkButton';
+import { extend } from 'flarum/common/extend';
+import UserCard from 'flarum/forum/components/UserCard';
+import UserControls from 'flarum/forum/utils/UserControls';
+import Button from 'flarum/common/components/Button';
+import LinkButton from 'flarum/common/components/LinkButton';
 import UserMoneyModal from './components/UserMoneyModal';
-import Model from 'flarum/Model';
-import User from 'flarum/models/User';
-import PostControls from 'flarum/utils/PostControls';
-import UserMoneyLogPage from './components/UserMoneyLogPage';
-import PointLog from './models/PointLog';
 import UserPage from 'flarum/forum/components/UserPage';
 
+export { default as extend } from './extend';
+
+function moneyValue(user) {
+  return Number(user.money ? user.money() : user.data?.attributes?.money || 0);
+}
+
 app.initializers.add('shebaoting-money', () => {
-  app.store.models['money-logs'] = PointLog;
-
-  User.prototype.canEditMoney = Model.attribute('canEditMoney');
-  app.routes['user.money-log'] = {
-    path: '/u/:username/money-log',
-    component: UserMoneyLogPage,
-  };
   extend(UserCard.prototype, 'infoItems', function (items) {
-    const money = this.attrs.user.data.attributes['money'] || 0;
+    const money = moneyValue(this.attrs.user);
+
+    if (money === 0 && app.forum.attribute('shebaoting-money.noshowzero')) return;
+
     const moneyName = app.forum.attribute('shebaoting-money.moneyname') || '[money]';
+    const levelNames = (app.forum.attribute('shebaoting-money.level_names') || '').split(',').filter(Boolean);
+    const scale = parseInt(app.forum.attribute('shebaoting-money.money_scale') || '100', 10);
 
-    // 获取后台设置的货币等级名称和进制
-    const levelNames = (app.forum.attribute('shebaoting-money.level_names') || '').split(',');
-    const scale = parseInt(app.forum.attribute('shebaoting-money.money_scale') || '100');
-
-    // 判断是否有设置货币等级名称
-    if (levelNames.length > 1 && levelNames[0] !== '') {
+    if (levelNames.length > 1 && scale > 1) {
       let remainingMoney = money;
-      let levelValues = [];
+      const levelValues = [];
 
       for (let i = 0; i < levelNames.length; i++) {
-        const levelValue = Math.floor(remainingMoney / Math.pow(scale, levelNames.length - 1 - i));
-        remainingMoney = remainingMoney % Math.pow(scale, levelNames.length - 1 - i);
+        const divisor = Math.pow(scale, levelNames.length - 1 - i);
+        const levelValue = Math.floor(remainingMoney / divisor);
+        remainingMoney %= divisor;
 
-        // 给每个等级名称和数值之间增加一些间距
         levelValues.push(m('span', { style: { marginRight: '15px' } }, `${levelNames[i]} ${levelValue}`));
       }
 
-      items.add('money', m('div', levelValues)); // 使用 div 容器包裹
+      items.add('money', m('div', levelValues));
     } else {
-      // 如果没有设置货币等级名称，则使用默认的货币名称
       items.add('money', m('span', moneyName.replace('[money]', money)));
     }
   });
 
-  // 扩展 UserPage 的 navItems，添加“积分记录”链接
   extend(UserPage.prototype, 'navItems', function (items) {
     const user = this.user;
 
-    // 只有在查看自己的个人资料时才显示链接
-    if (app.session.user && app.session.user.id() === user.id()) {
+    if (app.session.user && user && app.session.user.id() === user.id()) {
       items.add(
         'moneyLogs',
-        LinkButton.component(
-          {
-            href: app.route('user.money-log', { username: user.username() }),
-            name: 'moneyLogs',
-            icon: 'fas fa-coins',
-          },
-          app.translator.trans('shebaoting-money.forum.point_log.link')
-        ),
+        <LinkButton href={app.route('user.money-log', { username: user.slug() })} icon="fas fa-coins">
+          {app.translator.trans('shebaoting-money.forum.point_log.link')}
+        </LinkButton>,
         10
       );
     }
   });
 
   extend(UserControls, 'moderationControls', (items, user) => {
-    if (user.canEditMoney()) {
+    if (user.canEditMoney && user.canEditMoney()) {
       items.add(
         'money',
-        Button.component(
-          {
-            icon: 'fas fa-money-bill',
-            onclick: () => app.modal.show(UserMoneyModal, { user }),
-          },
-          app.translator.trans('shebaoting-money.forum.user_controls.money_button')
-        )
-      );
-    }
-  });
-
-  extend(PostControls, 'likeAction', function (items, post) {
-    const user = app.session.user;
-    const moneyForLike = parseFloat(app.forum.attribute('shebaoting-money.moneyforlike') || 0);
-
-    if (moneyForLike < 0 && user.money < Math.abs(moneyForLike)) {
-      items.add(
-        'like',
-        Button.component(
-          {
-            icon: 'fas fa-thumbs-up',
-            className: 'Button Button--link',
-            onclick: () => {
-              alert(app.translator.trans('shebaoting-money.forum.errors.not_enough_money'));
-            },
-          },
-          app.translator.trans('core.forum.post.like_link')
-        ),
-        20
-      );
-    } else {
-      // Call the original like functionality here
-      items.add(
-        'like',
-        Button.component(
-          {
-            icon: 'fas fa-thumbs-up',
-            className: 'Button Button--link',
-            onclick: () => {
-              post.save({ isLiked: !post.isLiked() });
-            },
-          },
-          app.translator.trans('core.forum.post.like_link')
-        ),
-        20
+        <Button icon="fas fa-money-bill" onclick={() => app.modal.show(UserMoneyModal, { user })}>
+          {app.translator.trans('shebaoting-money.forum.user_controls.money_button')}
+        </Button>
       );
     }
   });
